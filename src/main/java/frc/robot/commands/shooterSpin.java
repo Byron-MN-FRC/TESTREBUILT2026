@@ -13,6 +13,7 @@
 package frc.robot.commands;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Robot;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.Turret;
 
@@ -56,16 +57,16 @@ public class shooterSpin extends Command {
     @Override
     public void execute() {
         SmartDashboard.putNumber("Rotation", m_turret.getAngleRotations());
-        if (RobotContainer.getInstance().userController.getRightBumperButtonPressed()) {
+        if (Robot.getInstance().userController.getRightBumperButtonPressed()) {
             m_turret.spinRight();
         }
-        if (RobotContainer.getInstance().userController.getLeftBumperButtonPressed()) {
+        if (Robot.getInstance().userController.getLeftBumperButtonPressed()) {
             m_turret.spinLeft();
             if (m_turret.getZeroSwitch() == true) {
                 m_turret.spinStop();
             }
         }
-        else if (RobotContainer.getInstance().userController.getLeftBumperButtonReleased() || RobotContainer.getInstance().userController.getRightBumperButtonReleased()) {
+        else if (Robot.getInstance().userController.getLeftBumperButtonReleased() || Robot.getInstance().userController.getRightBumperButtonReleased()) {
             m_turret.spinStop();
         }
     

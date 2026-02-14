@@ -27,8 +27,8 @@ public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
-private static RobotContainer m_robotContainer = new RobotContainer();
-    public final Turret m_turrent = new Turret();
+// private static RobotContainer m_robotContainer = new RobotContainer();
+    public final Turret m_turret = new Turret();
     public final Shooter m_shooter = new Shooter();
 
 
@@ -52,9 +52,9 @@ private static RobotContainer m_robotContainer = new RobotContainer();
         SmartDashboard.putNumber("Rotation", m_turrent.getAngleRotations());
     }
     
-    public static RobotContainer getInstance() {
-        return m_robotContainer;
-    }
+    // public static RobotContainer getInstance() {
+    //     return m_robotContainer;
+    // }
     
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
@@ -64,7 +64,7 @@ private static RobotContainer m_robotContainer = new RobotContainer();
             drivetrain.applyRequest(() ->
                 drive.withVelocityX(-joystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                     .withVelocityY(-joystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                    .withRotationalRate(joystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
             )
         );
 
@@ -82,13 +82,22 @@ private static RobotContainer m_robotContainer = new RobotContainer();
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
-        joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        // joystick.back().and(joystick.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        // joystick.back().and(joystick.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        // joystick.start().and(joystick.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        // joystick.start().and(joystick.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
         joystick.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+                
+        joystick.start().onTrue(m_turret.checkZeroLeft().withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+                        
+        joystick.rightTrigger().whileTrue(new shooterSpin(m_turret).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+                        
+        joystick.leftTrigger().toggleOnTrue(new TrackHub(m_turret).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        joystick.back().whileTrue(m_shooter.spinKraken().withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
