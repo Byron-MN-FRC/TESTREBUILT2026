@@ -4,40 +4,56 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveRequest.RobotCentric;
-
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.RobotContainer;
+import frc.robot.Constants;
 import frc.robot.TurretCam;
-import frc.robot.subsystems.Turrent;
+import frc.robot.subsystems.Turret;
+import frc.robot.subsystems.Turret;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TrackHub extends Command {
 
-  private Turrent motors;
+  private Turret m_turret;
+  private Timer m_timer = new Timer();
 
   /** Creates a new trackHub. */
-  public TrackHub(Turrent subsystem) {
+  public TrackHub(Turret subsystem) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(subsystem);
-    motors = subsystem;
+    m_turret = subsystem;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_timer.reset();
+    m_timer.stop();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    motors.aim((motors.rotateShooterMotor.getPosition().getValueAsDouble() * 360) + TurretCam.getAngleError());
+
+    if (TurretCam.targetLocated() == true) {
+      m_turret
+          .aimRelativeDegrees((m_turret.getAngleDegrees()) + TurretCam.getAngleError());
+      m_timer.stop();
+      m_timer.reset();
+
+    } else if (!TurretCam.targetLocated() && !m_timer.isRunning()) {
+      m_timer.start();
+    }
+
+    if (m_timer.hasElapsed(Constants.TurretConstants.TURRET_CAM_TIMEOUT)) {
+      m_turret.aimDegrees(Constants.TurretConstants.NEUTRAL_POSITION);
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    motors.spinStop();
+    m_turret.spinStop();
   }
 
   // Returns true when the command should end.

@@ -32,6 +32,14 @@ public class Constants {
     public static final class TurretConstants {
         public static final int SENSOR_TO_MECH_RATIO = 10;
 
+        public static final double MAX_LEFT_POSITION = -0.25;
+        public static final double MAX_RIGHT_POSITION = 0.25;
+        public static final double NEUTRAL_POSITION = 0;
+        public static final double MAX_LEFT_DEGREES = MAX_LEFT_POSITION * 360;
+        public static final double MAX_RIGHT_DEGREES = MAX_RIGHT_POSITION * 360;
+
+        public static final double TURRET_CAM_TIMEOUT = 0.5;
+        
         public static final double degreesToRotations(double degrees) {
             return degrees / 360;
         }

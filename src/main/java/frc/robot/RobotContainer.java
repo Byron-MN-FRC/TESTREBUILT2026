@@ -21,14 +21,14 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Turrent;
+import frc.robot.subsystems.Turret;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
 private static RobotContainer m_robotContainer = new RobotContainer();
-    public final Turrent m_turrent = new Turrent();
+    public final Turret m_turrent = new Turret();
     public final Shooter m_shooter = new Shooter();
 
 
@@ -49,11 +49,13 @@ private static RobotContainer m_robotContainer = new RobotContainer();
 
     public RobotContainer() {
         configureBindings();
-        SmartDashboard.putNumber("Rotation", m_turrent.rotateShooterMotor.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Rotation", m_turrent.getAngleRotations());
     }
-public static RobotContainer getInstance() {
-    return m_robotContainer;
-  }
+    
+    public static RobotContainer getInstance() {
+        return m_robotContainer;
+    }
+    
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
