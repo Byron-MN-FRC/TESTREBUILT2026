@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.TurretCam;
 
 /**
  *
@@ -102,6 +103,8 @@ public class Turret extends SubsystemBase {
         // This method will be called once per scheduler run
         SmartDashboard.putNumber("Rotation", getAngleRotations());
         SmartDashboard.putBoolean("Zero?", zeroSwitch.get());
+
+        SmartDashboard.putBoolean("Target Locked", TurretCam.targetLocked());
 
     }
     

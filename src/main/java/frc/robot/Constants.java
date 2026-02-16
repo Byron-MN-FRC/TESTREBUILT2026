@@ -56,6 +56,7 @@ public class Constants {
 
     public static final class VisionConstants {
         public static final String TURRET_CAM = "limelight-turret";
+        public static final double ANGLE_ERROR_THRESHOLD = 3.0; // degrees
     }
 
     public static final class FieldConstants {
