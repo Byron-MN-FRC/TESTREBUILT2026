@@ -11,6 +11,11 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Translation2d;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants.  This class should not be used for any other purpose.  All constants should be
@@ -51,5 +56,20 @@ public class Constants {
 
     public static final class VisionConstants {
         public static final String TURRET_CAM = "limelight-turret";
+    }
+
+    public static final class FieldConstants {
+        public static final AprilTagFields APRIL_TAG_FIELD = AprilTagFields.k2026RebuiltAndymark;
+        public static final AprilTagFieldLayout APRIL_TAG_FIELD_LAYOUT = AprilTagFieldLayout
+            .loadField(APRIL_TAG_FIELD);
+
+        public static final double BLUE_HUB_CENTER_x = APRIL_TAG_FIELD_LAYOUT.getTagPose(5).get().getX();
+        public static final double BLUE_HUB_CENTER_Y = APRIL_TAG_FIELD_LAYOUT.getTagPose(10).get().getY();
+        public static final Translation2d BLUE_HUB_CENTER = new Translation2d(BLUE_HUB_CENTER_x, BLUE_HUB_CENTER_Y);
+
+        public static final double RED_HUB_CENTER_x = APRIL_TAG_FIELD_LAYOUT.getTagPose(21).get().getX();
+        public static final double RED_HUB_CENTER_Y = APRIL_TAG_FIELD_LAYOUT.getTagPose(20).get().getY();
+        public static final Translation2d RED_HUB_CENTER = new Translation2d(RED_HUB_CENTER_x, RED_HUB_CENTER_Y);
+
     }
 }

@@ -12,8 +12,8 @@ public class TurretCam {
      * Positive value indicates target is to the right (robot needs to turn clockwise to center).
      */
     public static double getAngleError() {
-        if (LimelightHelpers.getTV(Constants.VisionConstants.TURRET_CAM)) {
-            return -LimelightHelpers.getTX(Constants.VisionConstants.TURRET_CAM);
+        if (LimelightHelpers.getTV(Constants.VisionConstants.TURRET_CAM) && Math.abs(LimelightHelpers.getTX(Constants.VisionConstants.TURRET_CAM)) > 1) {
+            return LimelightHelpers.getTX(Constants.VisionConstants.TURRET_CAM);
         } else {
             return 0;
         }
@@ -22,4 +22,14 @@ public class TurretCam {
     public static boolean targetLocated() {
         return LimelightHelpers.getTV(Constants.VisionConstants.TURRET_CAM);
     } 
+
+    public static double getDistance() {
+        if (LimelightHelpers.getTV(Constants.VisionConstants.TURRET_CAM)) {
+            var Pos = LimelightHelpers.getBotPose2d(Constants.VisionConstants.TURRET_CAM).getTranslation();
+            var CurrPose = Robot.getInstance().drivetrain.getState().Pose.getTranslation();
+            // return Math.hypot(relPos[0], relPos[1]);
+            return Pos.getDistance(CurrPose);
+        }
+        return 0;
+    }
 }
