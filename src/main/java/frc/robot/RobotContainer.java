@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.POVButton;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.DriveToPosition;
@@ -66,20 +67,54 @@ public class RobotContainer {
             drivetrain.applyRequest(() -> idle).ignoringDisable(true)
         );
 
-        gamepad.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        gamepad.b().whileTrue(drivetrain.applyRequest(() ->
-            point.withModuleDirection(new Rotation2d(-gamepad.getLeftY(), -gamepad.getLeftX()))
-        ));
+        // gamepad.leftBumper()
+        //         .whileTrue(new Lock45Degrees(drivetrain).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        gamepad.back().and(gamepad.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        gamepad.back().and(gamepad.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        gamepad.start().and(gamepad.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        gamepad.start().and(gamepad.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+        gamepad.y()
+            .whileTrue(new DriveToPosition(drivetrain)
+            .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+            
+        // gamepad.rightTrigger().whileTrue(new FuelGRAB(m_hopper, m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+                
+        // accessory.y().onTrue(new ClimbCommand(m_climb, m_leds, m_hopper, m_turret).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
-        // Reset the field-centric heading on left bumper press.
-        gamepad.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        // accessory.b().onTrue(new ClimbZeroing(m_climb, m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // accessory.a().toggleOnTrue(new FloorTransfer(m_hopper).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // accessory.start().onTrue(new ZeroTurret(m_turret).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // //accessory.rightTrigger().whileTrue(new ShooterSpin( m_turret, m_leds ).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        
+        // accessory.leftTrigger().toggleOnTrue(new TrackHub( m_turret, m_leds ).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+                
+        // drivetrain.registerTelemetry(logger::telemeterize);
+        // accessory.back().onTrue(new InstantCommand(() -> m_turret.resetPosition())
+        //         .withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // accessory.rightTrigger().whileTrue(new ShooterSpin( m_turret, m_leds
+        // ).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // accessory.rightTrigger()
+        //         .whileTrue(new ShootCommand(m_shooter,m_hopper,m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+      
+        // final POVButton pOVButtonLeft = new POVButton(accessory.getHID(), 270, 0);
+        // pOVButtonLeft.whileTrue(new RPMShootCommand(Constants.ShooterConstants.middleSpeedTarget,m_shooter,m_hopper,m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    
+        // final POVButton pOVButtonRight = new POVButton(accessory.getHID(), 90, 0);
+        // pOVButtonRight.whileTrue(new RPMShootCommand(Constants.ShooterConstants.middleSpeedTarget,m_shooter,m_hopper,m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    
+        // final POVButton pOVButtonDown = new POVButton(accessory.getHID(), 180, 0);
+        // pOVButtonDown.whileTrue(new RPMShootCommand(Constants.ShooterConstants.lowSpeedTarget,m_shooter,m_hopper,m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        
+        // final POVButton pOVButtonUp = new POVButton(accessory.getHID(), 0, 0);
+        // pOVButtonUp.whileTrue(new RPMShootCommand(Constants.ShooterConstants.highSpeedTarget,m_shooter,m_hopper,m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+        
+        // gamepad.b().onTrue(new Intake(m_hopper, m_turret, m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+    
+        // gamepad.rightBumper().onTrue(new FuelJAMMED(m_hopper, m_shooter).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
+
+        // gamepad.leftTrigger().whileTrue(new Agitate(m_hopper, m_leds).withInterruptBehavior(InterruptionBehavior.kCancelSelf));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
