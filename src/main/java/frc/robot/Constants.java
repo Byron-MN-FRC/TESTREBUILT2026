@@ -10,8 +10,12 @@
 
 package frc.robot;
 
+import java.util.Optional;
+
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -62,5 +66,24 @@ public class Constants {
 
         
    }
+
+   public static final class Debug {
+        public static final boolean DEBUG_MODE = true;
+        public static final boolean INTAKE_ROLLER_EXISTS = true;
+        public static final boolean INTAKE_EXTEND_EXISTS = true;
+        public static final boolean SHOOTER_SPEED_OVERRIDE = true;
+    }
+
+    public static final class DriveConstants {
+
+        public static final Alliance MyAlliance() {
+            Optional<Alliance> ally = DriverStation.getAlliance();
+            if (ally.isPresent()) {
+                return ally.get() == Alliance.Red ? Alliance.Red : Alliance.Blue;
+            } else {
+                return null;
+            }
+        }
+    }
 
 }
